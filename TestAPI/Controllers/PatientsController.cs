@@ -42,7 +42,7 @@ namespace TestAPI.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("{from}/{perPage}/{fieldName}")]
         public async Task<ActionResult<IEnumerable<PatientModel>>> GetAsync(int from, int perPage, string fieldName)
         {
             try

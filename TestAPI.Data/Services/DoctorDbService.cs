@@ -51,10 +51,14 @@ namespace TestAPI.Data.Services
 
         public async Task<IEnumerable<DoctorViewModel>>  GetAllAsync(int from, int perPage, string fieldName)
         {
-            var propertyInfo = typeof(Doctor).GetProperty(fieldName);
+            if (string.IsNullOrEmpty(fieldName))
+            {
+                fieldName = "Id";
+            }
+
             var joinedList = await GetJoinedList();
 
-            return joinedList.OrderBy(x => propertyInfo.GetValue(x)).Skip((from-1) * perPage).Take(perPage).ToList();
+            return joinedList.OrderBy(x => x.GetType().GetProperty(fieldName).GetValue(x, null)).Skip((from-1) * perPage).Take(perPage).ToList();
         }
 
         public async Task<Doctor> GetByIdAsync(int id)
