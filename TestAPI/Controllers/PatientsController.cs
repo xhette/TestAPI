@@ -42,6 +42,28 @@ namespace TestAPI.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<PatientModel>>> GetAsync(int from, int perPage, string fieldName)
+        {
+            try
+            {
+                var dbServiceResult = await _patientDbService.GetAllAsync(from, perPage, fieldName);
+
+                if (dbServiceResult == null)
+                {
+                    return NotFound();
+                }
+
+                var values = dbServiceResult.Select(x => (PatientModel)x).ToList();
+
+                return Ok(values);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         // GET api/<PatientsController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<PatientUpdateModel>> Get(int id)
